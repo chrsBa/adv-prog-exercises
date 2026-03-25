@@ -111,7 +111,7 @@ object Assignment {
             val target = targetPosition
             if (target != null) {
                 val direction = robot.body.relativeDirection(target)
-                if (direction.length < 0.1) {
+                if (direction.length - 2 * robot.body.bodyRadius < 5.0) {
                     if (!goalReached) {
                         goalReached = true
                         // Notify all robots (including self) that we reached our goal
