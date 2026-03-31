@@ -20,7 +20,7 @@ genCartesian (xs:xss) = lpl2ll (cartesian xs (genCartesian xss))
 
 -- Task 4
 allAssignments :: [String] -> [[(String,Bool)]]
-allAssignments vars = genCartesian [[(v, False), (v, True)] | v <- vars]
+allAssignments vars = genCartesian [[(v, True), (v, False)] | v <- vars]
 
 -- Task 5
 data Formula = Var String
@@ -35,16 +35,16 @@ formula = Implies (And (Var "p") (Or (Var "q") (Var "p"))) (Not (Var "s"))
 
 -- Task 6
 vars :: Formula -> [String]
-vars (Var s)      = [s]
-vars (Not f)      = vars f
-vars (And f g)    = vars f ++ vars g
-vars (Or f g)     = vars f ++ vars g
-vars (Implies f g) = vars f ++ vars g
+vars (Var s)        = [s]
+vars (Not f)        = vars f
+vars (And f g)      = vars f ++ vars g
+vars (Or f g)       = vars f ++ vars g
+vars (Implies f g)  = vars f ++ vars g
 
 -- Task 7
 contains :: Eq a => [a] -> a -> Bool
-contains [] _ = False
-contains (x:xs) y | x == y    = True
+contains [] _                   = False
+contains (x:xs) y | x == y      = True
             | otherwise = contains xs y
 
 unique :: Eq a => [a] -> [a]
@@ -72,6 +72,8 @@ solve f = let uniqueVars = unique (vars f)
 -- Task 10
 formula1 :: Formula -- a ∨ b ∨ c ∨ d ∨ e ∨ f
 formula1 = Or (Var "a") (Or (Var "b") (Or (Var "c") (Or (Var "d") (Or (Var "e") (Var "f")))))
+-- Output of formula1: Just [("a",True),("b",True),("c",True),("d",True),("e",True),("f",True)]
 
 formula2 :: Formula -- ¬a ∧ a ∧ b ∧ c ∧ d ∧ e ∧ f
 formula2 = And (Not (Var "a")) (And (Var "a") (And (Var "b") (And (Var "c") (And (Var "d") (And (Var "e") (Var "f"))))))
+-- Output of formula2 is Nothing, since it contains a contradiction (¬a ∧ a).
